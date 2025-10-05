@@ -67,11 +67,19 @@ export default function Register() {
         <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
           <h2 className="text-white text-center">create your account</h2>
 
-          {/* Errors / Success */}
-          {error && <p className="text-red-500">{error.message}</p>}
-          {isSuccess && <p className="text-green-500">Registration successful ✅</p>}
+         
+        {error && (
+          <p className="text-red-500 text-center">
+    ❌ {error.response?.data?.message || error.message}
+    </p>)}
+    
+    {isSuccess && (
+      <p className="text-green-500 text-center">
+    ✅ Registered Successfully!
+    </p>)}
 
-          {/* Full Name */}
+
+     
           <label className="flex flex-col text-white text-sm">
             Full Name
             <input
@@ -84,7 +92,7 @@ export default function Register() {
             />
           </label>
 
-          {/* Email */}
+        
           <label className="flex flex-col text-white text-sm">
             Email
             <input
@@ -97,7 +105,7 @@ export default function Register() {
             />
           </label>
 
-          {/* Password */}
+      
           <label className="flex flex-col text-white text-sm relative">
             Password
             <div className="relative">
@@ -118,7 +126,7 @@ export default function Register() {
             </div>
           </label>
 
-          {/* Confirm Password */}
+         
           <label className="flex flex-col text-white text-sm relative">
             Confirm Password
             <div className="relative">
@@ -139,7 +147,7 @@ export default function Register() {
             </div>
           </label>
 
-          {/* Privacy Policy */}
+        
           <label className="flex items-center gap-2 text-white text-sm">
             <input
               type="checkbox"
@@ -150,7 +158,7 @@ export default function Register() {
             I agree to the Privacy Policy
           </label>
 
-          {/* Register Button */}
+        
           <button
             type="submit"
             disabled={isPending}
@@ -160,7 +168,7 @@ export default function Register() {
           </button>
         </form>
 
-        {/* Login link */}
+  
         <p className="text-sm text-white">
           Already have an account?{" "}
           <a href="/login" className="text-white font-semibold underline ml-2">
@@ -168,7 +176,7 @@ export default function Register() {
           </a>
         </p>
 
-        {/* Or continue with */}
+      
         <div className="flex flex-col items-center mt-6 w-full max-w-md">
           <div className="flex items-center w-full gap-2">
             <div className="flex-1 h-px bg-white"></div>
@@ -189,8 +197,7 @@ export default function Register() {
         </div>
       </div>
 
-      {isSuccess && <p className="text-green-500">✅ Registered Successfully!</p>}
-      {error && <p className="text-red-500">❌ {error.response?.data?.message || error.message}</p>}
+    
     </LayoutHome>
   );
 }
