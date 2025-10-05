@@ -4,8 +4,11 @@ import { useState } from "react";
 import LayoutHome from "../layoutHome/page";
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebookF } from "react-icons/fa";
 import { useRegister } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+
 
 export default function Register() {
+   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [agree, setAgree] = useState(false);
   const [formData, setFormData] = useState({
@@ -40,11 +43,18 @@ export default function Register() {
       return alert("You must agree to the Privacy Policy");
     }
 
-    mutate({
-      username: formData.name,
-      email: formData.email,
-      password: formData.password,
-    });
+   mutate(
+      {
+        username: formData.name,
+        email: formData.email,
+        password: formData.password,
+      },
+      {
+        onSuccess: () => {
+          router.push("/login");
+        },
+      }
+    );
   };
 
   return (

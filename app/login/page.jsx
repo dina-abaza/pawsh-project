@@ -4,8 +4,11 @@ import { useState } from "react";
 import LayoutHome from "../layoutHome/page";
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebookF } from "react-icons/fa";
 import { useLogin } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+
 
 export default function Login() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [email, setEmail] = useState("");
@@ -15,7 +18,14 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    mutate({ email, password });
+   mutate(
+      { email, password },
+      {
+        onSuccess: () => {
+          router.push("/profile");
+        },
+      }
+    );
   };
 
   return (
@@ -28,12 +38,12 @@ export default function Login() {
         <form onSubmit={handleLogin} className="w-full flex flex-col gap-4">
           <h2 className="text-white text-center">login to your account</h2>
 
-          {/* Error */}
+        
           {error && (
             <p className="text-red-400 text-center">{error.message}</p>
           )}
 
-          {/* Email */}
+          
           <label className="flex flex-col text-white text-sm">
             Email
             <input
@@ -46,7 +56,7 @@ export default function Login() {
             />
           </label>
 
-          {/* Password */}
+          
           <label className="flex flex-col text-white text-sm relative">
             Password
             <div className="relative">
@@ -67,7 +77,7 @@ export default function Login() {
             </div>
           </label>
 
-          {/* remember me */}
+          
           <div className="flex justify-between items-center">
             <label className="flex items-center gap-2 text-white text-sm">
               <input
@@ -81,7 +91,7 @@ export default function Login() {
             <p className="text-sm text-white cursor-pointer">forget password?</p>
           </div>
 
-          {/* Login Button */}
+          
           <button
             type="submit"
             disabled={isPending}
@@ -90,7 +100,7 @@ export default function Login() {
             {isPending ? "Logging in..." : "Login"}
           </button>
 
-          {/* Register link */}
+        
           <p className="text-sm text-white flex justify-center">
             don't have an account?{" "}
             <a
@@ -102,7 +112,7 @@ export default function Login() {
           </p>
         </form>
 
-        {/* Or continue with */}
+      
         <div className="flex flex-col items-center mt-6 w-full max-w-md">
           <div className="flex items-center w-full gap-2">
             <div className="flex-1 h-px bg-white"></div>

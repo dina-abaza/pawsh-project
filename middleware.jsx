@@ -3,6 +3,9 @@ import { NextResponse } from "next/server";
 import api from "./axios";
 
 export async function middleware(req) {
+  console.log("Access:", req.cookies.get("accessToken"));
+console.log("Refresh:", req.cookies.get("refreshToken"));
+
   const accessToken = req.cookies.get("accessToken");
 
   try {
@@ -24,7 +27,7 @@ export async function middleware(req) {
     return NextResponse.next();
   } catch (err) {
     console.error("Token error:", err);
-    return NextResponse.redirect(new URL("/register", req.url));
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 }
 
