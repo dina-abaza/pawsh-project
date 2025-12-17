@@ -3,8 +3,9 @@
 import { useState } from "react";
 import LayoutHome from "../layoutHome/page";
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebookF } from "react-icons/fa";
-import { useRegister } from "@/hooks/useAuth";
+import { useRegister } from "@/app/hooks/useAuth";
 import { useRouter } from "next/navigation";
+
 
 
 export default function Register() {
@@ -51,7 +52,7 @@ export default function Register() {
       },
       {
         onSuccess: () => {
-          router.push("/login");
+          router.push("/profile");
         },
       }
     );
@@ -66,8 +67,6 @@ export default function Register() {
       <div className="mt-10 flex flex-col items-center gap-6 w-full max-w-md mx-auto">
         <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
           <h2 className="text-white text-center">create your account</h2>
-
-         
         {error && (
           <p className="text-red-500 text-center">
     ❌ {error.response?.data?.message || error.message}
@@ -78,8 +77,6 @@ export default function Register() {
     ✅ Registered Successfully!
     </p>)}
 
-
-     
           <label className="flex flex-col text-white text-sm">
             Full Name
             <input

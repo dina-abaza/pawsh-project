@@ -15,7 +15,7 @@ export default function LayoutHome({title,description,img,children}) {
 
           {/* أيقونة بصمة الكلب */}
           <FaPaw 
-            className="absolute -top-2 right-[-5px] text-yellow-400 text-3xl"
+            className="absolute -top-[6px] right-[2px] text-yellow-400 text-3xl rotate-[35deg] translate-x-[-6px]"
           />
         </div>
 
