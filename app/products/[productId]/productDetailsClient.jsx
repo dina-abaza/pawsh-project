@@ -23,9 +23,9 @@ export default function ProductDetailsClient({ product }) {
     : "/placeholder.jpg";
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-green-50 to-yellow-50 flex items-center justify-center p-6">
+    <section className="min-h-screen  bg-gradient-to-b from-green-50 to-yellow-50 pt-10 p-6">
       {/* Container */}
-      <div className="max-w-5xl w-full bg-white rounded-3xl shadow-lg overflow-hidden flex flex-col md:flex-row gap-6 md:gap-10 p-6 md:p-10">
+      <div className="max-w-5xl w-full mx-auto  bg-white rounded-3xl shadow-lg overflow-hidden flex flex-col md:flex-row gap-6 md:gap-10 p-6 md:p-10">
         
         {/* Image */}
         <div className="md:w-1/2 flex-shrink-0">
@@ -43,9 +43,10 @@ export default function ProductDetailsClient({ product }) {
         <div className="md:w-1/2 flex flex-col justify-between">
           {/* Text */}
           <div>
-            <h1 className="relative text-3xl font-extrabold text-green-900 flex items-center gap-2">
-             <FaPaw className="absolute top-0 right-0 text-yellow-400 text-3xl rotate-12" />  {product.title}
-            </h1>
+         <h1 className=" text-3xl font-extrabold text-green-900">
+  {product.title}🐾
+ 
+</h1>
 
             <p className="text-2xl font-bold text-green-700 mt-3">
               {product.price} EGP
@@ -59,14 +60,23 @@ export default function ProductDetailsClient({ product }) {
           {/* Actions */}
           <div className="mt-6 flex flex-col sm:flex-row gap-4">
             <button
-              onClick={() => addToFavorites(product)}
+              onClick={() => addToFavorites({ 
+                id: product._id,
+                title: product.title,
+                price: product.price,
+                image: product.image,
+                quantity:product.quantity})}
               className="flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition"
             >
               <FaHeart /> Add to Favorites
             </button>
 
             <button
-              onClick={() => addToCart(product)}
+              onClick={() => addToCart({ 
+                id: product._id,
+                title: product.title,
+                price: product.price,
+                image: product.image})}
               className="flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-green-700 text-white font-semibold hover:bg-green-800 transition"
             >
               <FaShoppingCart /> Add to Cart

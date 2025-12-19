@@ -1,5 +1,6 @@
 import api from "@/axios";
 import ProductsGrid from "./ProductsGrid";
+export const dynamic = "force-dynamic";
 
 export default async function ProductsPage() {
   let products = [];

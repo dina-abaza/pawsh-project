@@ -1,5 +1,7 @@
 
 // /app/products/[productId]/page.jsx
+export const dynamic = "force-dynamic";
+
 import ProductDetailsClient from "./ProductDetailsClient";
 import api from "@/axios";
 

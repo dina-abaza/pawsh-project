@@ -1,6 +1,7 @@
 import Link from "next/link";
 import api from "@/axios";
 import { FaPaw } from "react-icons/fa";
+export const dynamic = "force-dynamic";
 
 export default async function CategoriesPage() {
   try {
@@ -10,12 +11,9 @@ export default async function CategoriesPage() {
     return (
       <section className="min-h-screen bg-gradient-to-b from-green-50 to-yellow-50 py-10 px-6">
         {/* Header */}
-        <div className="text-center mb-10">
-          <FaPaw className="text-4xl text-yellow-400 mx-auto mb-3 rotate-12" />
-          <h1 className="text-3xl font-extrabold text-green-900">
-            Shop by Category
-          </h1>
-          <p className="text-gray-600 mt-2">
+        <div className=" text-center mb-10">
+          
+          <p className="text-gray-600 text-3xl mt-2">
             Choose what fits your pet best 🐾
           </p>
         </div>

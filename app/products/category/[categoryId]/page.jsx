@@ -1,5 +1,6 @@
 import api from "@/axios";
 import CategoryProductsGrid from "./CategoryProductsGrid";
+export const dynamic = "force-dynamic";
 
 export default async function CategoryProductsPage({ params }) {
   const { categoryId } = params;
