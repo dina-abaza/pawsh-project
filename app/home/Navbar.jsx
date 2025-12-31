@@ -8,8 +8,9 @@ import { HiOutlineDotsVertical } from "react-icons/hi";
 import { FaPaw, FaUserCircle, FaCog, FaSignOutAlt, FaShoppingCart, FaHeart } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuthStore } from "@/app/hooks/useAuthStore";
-import { useCartStore } from "@/app/hooks/useCartStore"; // سلة التسوق
-import { useFavoritesStore } from "@/app/hooks/useFavoritesStore"; // المفضلة
+import { useCartStore } from "@/app/hooks/useCartStore";
+import { useFavoritesStore } from "@/app/hooks/useFavoritesStore";
+import axios from "axios";
 
 const Navbar = () => {
   const router = useRouter();
@@ -18,13 +19,48 @@ const Navbar = () => {
 
   const [showSearch, setShowSearch] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // Zustand
   const cart = useCartStore((state) => state.cart);
   const favorites = useFavoritesStore((state) => state.favorites);
 
   const cartCount = cart.reduce((acc, item) => acc + (item.quantity || 1), 0);
   const favCount = favorites.length;
+
+  // جلب الاقتراحات
+  const fetchSuggestions = async (query) => {
+    if (!query) {
+      setSuggestions([]);
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await axios.get(
+        "https://pawsh-pets-back-end-api.vercel.app/api/search/suggest",
+        { params: { q: query } }
+      );
+      setSuggestions(res.data.suggestions || []);
+    } catch (err) {
+      console.error("Error fetching suggestions:", err);
+      setSuggestions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    fetchSuggestions(e.target.value);
+  };
+
+  const handleSuggestionClick = (item) => {
+    router.push(`/search?q=${encodeURIComponent(item.title)}`);
+    setSearchQuery("");
+    setSuggestions([]);
+    setShowSearch(false);
+  };
 
   return (
     <nav className="w-full flex items-center justify-between px-6 py-3 bg-[#f5f5f5] shadow-sm">
@@ -95,55 +131,72 @@ const Navbar = () => {
 
           <AnimatePresence>
             {showSearch && (
-              <motion.input
-                key="search"
+              <motion.div
+                key="search-container"
                 initial={{ width: 0, opacity: 0 }}
-                animate={{ width: 160, opacity: 1 }}
+                animate={{ width: 200, opacity: 1 }}
                 exit={{ width: 0, opacity: 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                type="text"
-                placeholder="Search..."
-                className="px-2 py-1 text-sm rounded-md border border-gray-300 outline-none focus:border-green-500"
-              />
+                className="relative"
+              >
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="px-2 py-1 text-sm rounded-md border border-gray-300 outline-none focus:border-green-500 w-full"
+                />
+
+                {/* Dropdown الاقتراحات */}
+                {suggestions.length > 0 && (
+                  <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 shadow-lg z-50 rounded-md overflow-hidden">
+                    {suggestions.map((item) => (
+                      <button
+                        key={item._id}
+                        onClick={() => handleSuggestionClick(item)}
+                        className="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm"
+                      >
+                        {item.title} - ${item.price}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-      {/* السلة والمفضلة */}
-<div className="flex items-center gap-4 ml-2">
-  {/* Favorites */}
-  <Link href="/favorites" className="relative">
-    <FaHeart className="text-gray-400 text-xl hover:text-gray-500 transition cursor-pointer" />
-    {favCount > 0 && (
-      <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-        {favCount}
-      </span>
-    )}
-  </Link>
+        {/* Favorites & Cart */}
+        <div className="flex items-center gap-4 ml-2">
+          <Link href="/favorites" className="relative">
+            <FaHeart className="text-gray-400 text-xl hover:text-gray-500 transition cursor-pointer" />
+            {favCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                {favCount}
+              </span>
+            )}
+          </Link>
 
-  {/* Cart */}
-  <Link href="/cart" className="relative">
-    <FaShoppingCart className="text-gray-400 text-xl hover:text-gray-500 transition cursor-pointer" />
-    {cartCount > 0 && (
-      <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-        {cartCount}
-      </span>
-    )}
-  </Link>
-</div>
-
+          <Link href="/cart" className="relative">
+            <FaShoppingCart className="text-gray-400 text-xl hover:text-gray-500 transition cursor-pointer" />
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                {cartCount}
+              </span>
+            )}
+          </Link>
+        </div>
       </div>
 
       {/* Center Title */}
- <Link href="/" className="cursor-pointer text-gray-700 font-semibold text-lg relative inline-block">
-  <h1 className="text-[2.5rem] font-extrabold text-green-800 relative z-10">
-    pawsh
-  </h1>
-  <FaPaw
-    className="absolute -top-[6px] right-[6px] text-yellow-400 text-3xl rotate-[35deg] translate-x-[-6px]"
-  />
-</Link>
-
+      <Link href="/" className="cursor-pointer text-gray-700 font-semibold text-lg relative inline-block">
+        <h1 className="text-[2.5rem] font-extrabold text-green-800 relative z-10">
+          pawsh
+        </h1>
+        <FaPaw
+          className="absolute -top-[6px] right-[6px] text-yellow-400 text-3xl rotate-[35deg] translate-x-[-6px]"
+        />
+      </Link>
 
       {/* Right User Greeting */}
       <div className="text-gray-600 font-semibold text-base">

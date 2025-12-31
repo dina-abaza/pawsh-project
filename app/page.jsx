@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Header from "./home/header";
-import InformationSection from "./home/InformationSection";
+import InformationSection from "./home/informations/informationSection";
 
 export default function HomePage() {
   return (
